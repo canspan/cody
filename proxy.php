@@ -20,20 +20,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Load API key from .env file
+// Load API key from server environment first, then optionally from a local .env file.
+$env = [];
 $envFile = __DIR__ . '/.env';
-if (!file_exists($envFile)) {
-    http_response_code(500);
-    echo json_encode(['error' => '.env file not found']);
-    exit;
+
+if (file_exists($envFile)) {
+    $parsedEnv = parse_ini_file($envFile);
+    if (is_array($parsedEnv)) {
+        $env = $parsedEnv;
+    }
 }
 
-$env = parse_ini_file($envFile);
 $apiKey = getenv('OPENROUTER_API_KEY') ?: ($env['OPENROUTER_API_KEY'] ?? null);
 
 if (!$apiKey) {
     http_response_code(500);
-    echo json_encode(['error' => 'API key not configured in .env']);
+    echo json_encode(['error' => 'API key not configured']);
     exit;
 }
 
