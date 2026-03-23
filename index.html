@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cody</title>
+    <script>
+        (function () {
+            const bust = Date.now().toString();
+            window.__assetBust = bust;
+
+            const stylesheet = document.createElement('link');
+            stylesheet.rel = 'stylesheet';
+            stylesheet.href = `styles.css?v=${bust}`;
+            document.head.appendChild(stylesheet);
+        })();
+    </script>
+</head>
+<body>
+    <div id="ai-bubble" class="ai-bubble">
+        <div id="chat-messages" class="chat-messages">
+            <div class="chat-message cody">Hi! I'm Cody. How can I help?</div>
+        </div>
+        <form id="chat-form" class="chat-form" autocomplete="off">
+            <input id="chat-input" class="chat-input" type="text" placeholder="Ask Cody something…" maxlength="500" />
+            <button type="submit" class="chat-send" aria-label="Send">&#9654;</button>
+        </form>
+        <div class="ai-bubble-tail"></div>
+    </div>
+
+    <div id="pet-container"></div>
+
+    <script>
+        (function () {
+            const bust = window.__assetBust || Date.now().toString();
+            const appScript = document.createElement('script');
+            appScript.src = `script.js?v=${bust}`;
+            document.body.appendChild(appScript);
+        })();
+    </script>
+</body>
+</html>

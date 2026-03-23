@@ -1,0 +1,257 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100dvh;
+    margin: 0;
+    overflow: hidden;
+}
+
+h1,
+#action-display {
+    display: none;
+}
+
+h1 {
+    margin: 20px 0 8px;
+}
+
+#pet-container {
+    width: 128px;
+    height: 128px;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background-image: url('site_pet_grid.png');
+    background-repeat: no-repeat;
+    /* Keeps the pixels sharp on modern screens */
+    image-rendering: pixelated; 
+    /* The sprite sheet is 4 frames wide (4 * 64px) */
+    background-size: 512px 1280px;
+    background-position: 0px -260px; /* Initial state: Sitting, nudged to hide top seam */
+    z-index: 1000;
+}
+
+.ai-bubble {
+    position: fixed;
+    bottom: 160px;
+    right: 16px;
+    width: 300px;
+    background-color: #f0f0f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-messages {
+    padding: 12px 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.chat-message {
+    font-size: 13px;
+    line-height: 1.45;
+    padding: 7px 10px;
+    border-radius: 10px;
+    max-width: 85%;
+    word-break: break-word;
+}
+
+.chat-message.cody {
+    background-color: #ffffff;
+    color: #222;
+    align-self: flex-start;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.chat-message.user {
+    background-color: #333;
+    color: #fff;
+    align-self: flex-end;
+}
+
+.chat-message.thinking {
+    color: #888;
+    font-style: italic;
+    align-self: flex-start;
+    background: none;
+    padding: 4px 10px;
+}
+
+.chat-form {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    padding: 8px 10px;
+    gap: 6px;
+    background-color: #f0f0f0;
+}
+
+.chat-input {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    background: #fff;
+    color: #333;
+}
+
+.chat-input:focus {
+    border-color: #999;
+}
+
+.chat-send {
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.15s;
+}
+
+.chat-send:hover {
+    background: #555;
+}
+
+.chat-send:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
+.ai-bubble-tail {
+    position: absolute;
+    bottom: -10px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #f0f0f0;
+    border-bottom: 0;
+}
+
+#action-display {
+    margin-top: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Animations - Using steps(4) to snap between frames */
+.action-beg {
+    animation: beg-intro 0.12s steps(1) 1, beg-loop 0.6s steps(3) infinite 0.12s;
+}
+
+.action-walk {
+    animation: walk-cycle 0.6s steps(4) infinite;
+}
+
+.action-sit {
+    animation: sit-cycle 0.8s steps(3) 1 forwards;
+}
+
+.action-lay {
+    animation: lay-cycle 0.8s steps(3) 1 forwards;
+}
+
+.action-snarl {
+    animation: snarl-loop 0.45s steps(2) 4;
+}
+
+.action-spin {
+    animation: spin-cycle 0.7s steps(3) 1 forwards;
+}
+
+.action-lick {
+    animation: lick-cycle 0.45s steps(3) 4;
+}
+
+.action-wag {
+    animation: wag-cycle 0.45s steps(2) 4;
+}
+
+.action-pout {
+    animation: pout-cycle 0.45s steps(3) 4;
+}
+
+.action-croc {
+    animation: croc-cycle 0.85s steps(4) infinite;
+}
+
+/* Row 1: Begging (Frames 1-4) */
+@keyframes beg-intro {
+    from { background-position: 0px -4px; }
+    to { background-position: 0px -4px; }
+}
+
+@keyframes beg-loop {
+    from { background-position: -128px -4px; }
+    to { background-position: -512px -4px; }
+}
+
+/* Row 2: Walk (Frames 5-8) */
+@keyframes walk-cycle {
+    from { background-position: 0px -132px; }
+    to { background-position: -512px -132px; }
+}
+
+/* Row 3: Sit (Frames 9-12) */
+@keyframes sit-cycle {
+    from { background-position: 0px -260px; }
+    to { background-position: -384px -260px; }
+}
+
+/* Row 4: Lay Down (Frames 13-16) */
+@keyframes lay-cycle {
+    from { background-position: 0px -388px; }
+    to { background-position: -384px -388px; }
+}
+
+/* Row 5: Snarl (Frames 17-20) */
+@keyframes snarl-loop {
+    from { background-position: -256px -516px; }
+    to { background-position: -512px -516px; }
+}
+
+/* Row 6: Spin (Frames 21-24) */
+@keyframes spin-cycle {
+    from { background-position: 0px -644px; }
+    to { background-position: -384px -644px; }
+}
+
+/* Row 7: Lick Paw (Frames 25-28) */
+@keyframes lick-cycle {
+    from { background-position: -128px -772px; }
+    to { background-position: -512px -772px; }
+}
+
+/* Row 8: Wag Tail (Frames 29-32) */
+@keyframes wag-cycle {
+    from { background-position: -128px -900px; }
+    to { background-position: -384px -900px; }
+}
+
+/* Row 9: Pout (Frames 33-36) */
+@keyframes pout-cycle {
+    from { background-position: -128px -1028px; }
+    to { background-position: -512px -1028px; }
+}
+
+/* Row 10: Croc (Frames 37-40) */
+@keyframes croc-cycle {
+    from { background-position: 0px -1156px; }
+    to { background-position: -512px -1156px; }
+}
